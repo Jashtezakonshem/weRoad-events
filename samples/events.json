@@ -1,0 +1,42 @@
+[
+  {
+    "id": "f2603d98-bae2-45de-900f-ea0e84993805",
+    "title": "Tech Conference 2025",
+    "description": "Join industry leaders and tech enthusiasts at this premier conference, where we'll discuss the latest advancements in software engineering, AI, cloud computing, and cybersecurity. Network with top professionals and gain valuable insights from expert speakers.",
+    "location": "New York, NY",
+    "date": "2025-06-15T14:00:00Z",
+    "capacity": 30
+  },
+  {
+    "id": "76ce3383-e56c-4bd0-b2da-ab8f990061b1",
+    "title": "React Native Workshop",
+    "description": "A hands-on coding workshop focused on building high-performance mobile applications using React Native and Expo. Learn from experienced developers, explore best practices, and build a real-world project from scratch.",
+    "location": "San Francisco, CA",
+    "date": "2025-07-10T10:00:00Z",
+    "capacity": 35
+  },
+  {
+    "id": "ae16d7db-995a-48c3-8cf6-1075d155e220",
+    "title": "NestJS API Development Bootcamp",
+    "description": "An intensive bootcamp designed to teach you how to build scalable and maintainable backend applications with NestJS. Dive into TypeScript, GraphQL, authentication, database integration, and best practices for modern API development.",
+    "location": "Remote",
+    "date": "2025-08-05T16:00:00Z",
+    "capacity": 25
+  },
+  {
+    "id": "1ce61f3d-e743-44f1-ad86-eee1f8378716",
+    "title": "GraphQL Summit",
+    "description": "A deep dive into the world of GraphQL, covering everything from schema design to performance optimization and security best practices. Learn from industry experts and discover how GraphQL can improve your API architecture.",
+    "location": "Berlin, Germany",
+    "date": "2025-09-20T09:00:00Z",
+    "capacity": 20
+  },
+  {
+    "id": "b65fe9f1-a2cf-40f6-be9f-f7c1653f6ee3",
+    "title": "Mobile UX/UI Design Meetup",
+    "description": "An engaging meetup for designers, developers, and product managers interested in mobile user experience and interface design. Discuss the latest trends, share insights, and explore case studies of successful mobile applications.",
+    "location": "London, UK",
+    "date": "2025-10-12T18:00:00Z",
+    "capacity": 50
+  }
+]
