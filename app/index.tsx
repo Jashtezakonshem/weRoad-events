@@ -1,23 +1,37 @@
-import React, { FunctionComponent, useCallback, useState } from "react";
+import React, {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import {
   Dimensions,
   FlatList,
   Image,
   SafeAreaView,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import { Colors } from "@/constants/colors";
 import EventItem from "@/components/Event";
-import eventsSample from "../samples/events.json";
-import { type Event } from "@/types/event";
+import { type Event } from "@/types";
 import Logo from "@/assets/images/logo.png";
 import { useRouter } from "expo-router";
+// this is just for having axios defaults
+import "@/api";
+import { getEvents } from "@/api";
 
 const Events: FunctionComponent = () => {
   const router = useRouter();
-  const [events, setEvents] = useState<Event[]>(eventsSample);
+  const [events, setEvents] = useState<Event[]>([]);
+
+  useEffect(() => {
+    const loadEvents = async () => {
+      const events = await getEvents();
+      setEvents(events);
+    };
+    loadEvents();
+  }, []);
 
   const renderEvent = useCallback(({ item }: { item: Event }) => {
     return (
@@ -45,11 +59,7 @@ const Events: FunctionComponent = () => {
 const Header: FunctionComponent = () => {
   return (
     <View>
-      <Image
-        source={Logo}
-        resizeMode="contain"
-        style={{ width: Dimensions.get("window").width / 2, height: 100 }}
-      />
+      <Image source={Logo} resizeMode="contain" style={styles.logo} />
     </View>
   );
 };
@@ -63,5 +73,6 @@ const styles = StyleSheet.create({
   list: {
     marginTop: 16,
   },
+  logo: { width: Dimensions.get("window").width / 2, height: 100 },
 });
 export default Events;

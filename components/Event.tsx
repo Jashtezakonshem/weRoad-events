@@ -1,7 +1,7 @@
 import React, { FunctionComponent, memo } from "react";
 import { View, StyleSheet, Text, Dimensions, Pressable } from "react-native";
 import { Colors } from "@/constants/colors";
-import { Event as EventType } from "@/types/event";
+import { Event as EventType } from "@/types";
 import Chip from "@/components/Chip";
 import Entypo from "@expo/vector-icons/Entypo";
 import { DateTime } from "luxon";
@@ -43,7 +43,7 @@ const Event: FunctionComponent<EventProps> = ({ event, onPress }) => {
       <View style={styles.availabilityRow}>
         {lowAvailability ? (
           <Text style={styles.availabilityLabel}>
-            only {event.capacity - event.registrations} spots left
+            only {event.capacity - event.reservationsCount} spots left
           </Text>
         ) : undefined}
         <Text
@@ -52,7 +52,7 @@ const Event: FunctionComponent<EventProps> = ({ event, onPress }) => {
             { color: full ? Colors.primary : Colors.secondary },
           ]}
         >
-          {full ? "Full" : `${event.registrations} / ${event.capacity}`}
+          {full ? "Full" : `${event.reservationsCount} / ${event.capacity}`}
         </Text>
       </View>
     </Pressable>

@@ -1,53 +1,89 @@
-import React, { FunctionComponent } from "react";
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
-import eventsSample from "../../samples/events.json";
-import { Event } from "@/types/event";
+import React, {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import {
+  ActivityIndicator,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Event } from "@/types";
 import { Colors } from "@/constants/colors";
 import Chip from "@/components/Chip";
 import Entypo from "@expo/vector-icons/Entypo";
 import { getFormattedDate, hasLowAvailability, isFull } from "@/utils/event";
+import { getEventById } from "@/api";
 
 const EventDetails: FunctionComponent = () => {
+  const router = useRouter();
   const { id } = useLocalSearchParams();
-  //TODO on mount get request from server
-  const event: Event = eventsSample.find((event: Event) => event.id === id);
+  const [event, setEvent] = useState<Event>();
+
+  useEffect(() => {
+    const loadEvent = async () => {
+      const event = await getEventById(id as string);
+      setEvent(event);
+    };
+    loadEvent();
+  }, [id]);
+
   const full = isFull(event);
   const lowAvailability = hasLowAvailability(event);
   const date = getFormattedDate(event);
 
+  const showModal = useCallback(() => {
+    router.push(`/eventDetails/modal?id=${id}`);
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ padding: 16 }}>
-        <Text style={styles.title}>{event.title}</Text>
-        <Text style={styles.description}>{event.description}</Text>
-        <View style={styles.infoRow}>
-          <Chip
-            icon={<Entypo name="location-pin" size={16} color={Colors.white} />}
-            text={event.location}
-            color={Colors.secondary}
-          />
-          <Text>{date}</Text>
+      {!event ? (
+        <View style={styles.loading}>
+          <ActivityIndicator size="large" color={Colors.primary} />
         </View>
-        <View style={styles.availabilityRow}>
-          {lowAvailability ? (
-            <Text style={styles.availabilityLabel}>
-              only {event.capacity - event.registrations} spots left
+      ) : (
+        <View style={{ padding: 16 }}>
+          <Text style={styles.title}>{event.title}</Text>
+          <Text style={styles.description}>{event.description}</Text>
+          <View style={styles.infoRow}>
+            <Chip
+              icon={
+                <Entypo name="location-pin" size={16} color={Colors.white} />
+              }
+              text={event.location}
+              color={Colors.secondary}
+            />
+            <Text>{date}</Text>
+          </View>
+          <View style={styles.availabilityRow}>
+            {lowAvailability ? (
+              <Text style={styles.availabilityLabel}>
+                only {event.capacity - (event.reservations?.length || 0)} spots
+                left
+              </Text>
+            ) : undefined}
+            <Text
+              style={[
+                styles.availability,
+                { color: full ? Colors.primary : Colors.secondary },
+              ]}
+            >
+              {full
+                ? "Full"
+                : `${event.reservations?.length || 0} / ${event.capacity}`}
             </Text>
-          ) : undefined}
-          <Text
-            style={[
-              styles.availability,
-              { color: full ? Colors.primary : Colors.secondary },
-            ]}
-          >
-            {full ? "Full" : `${event.registrations} / ${event.capacity}`}
-          </Text>
+          </View>
+          <Pressable onPress={showModal} style={styles.button}>
+            <Text style={styles.buttonText}>Book this event</Text>
+          </Pressable>
         </View>
-        <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>Book this event</Text>
-        </Pressable>
-      </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -60,6 +96,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: Colors.primary,
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   description: {
     fontSize: 16,

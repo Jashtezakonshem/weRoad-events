@@ -4,6 +4,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
+import Toast from "react-native-toast-message";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -31,8 +32,16 @@ export default function RootLayout() {
           name="eventDetails/[id]"
           options={{ title: "Event Details" }}
         />
+        <Stack.Screen
+          name="eventDetails/modal"
+          options={{
+            title: "Book Event",
+            presentation: "modal",
+          }}
+        />
       </Stack>
       <StatusBar style="auto" />
+      <Toast />
     </>
   );
 }
