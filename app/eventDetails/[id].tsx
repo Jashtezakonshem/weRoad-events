@@ -12,7 +12,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { Event } from "@/types";
 import { Colors } from "@/constants/colors";
 import Chip from "@/components/Chip";
@@ -25,13 +25,15 @@ const EventDetails: FunctionComponent = () => {
   const { id } = useLocalSearchParams();
   const [event, setEvent] = useState<Event>();
 
-  useEffect(() => {
-    const loadEvent = async () => {
-      const event = await getEventById(id as string);
-      setEvent(event);
-    };
-    loadEvent();
-  }, [id]);
+  useFocusEffect(
+    useCallback(() => {
+      const loadEvent = async () => {
+        const event = await getEventById(id as string);
+        setEvent(event);
+      };
+      loadEvent();
+    }, []),
+  );
 
   const full = isFull(event);
   const lowAvailability = hasLowAvailability(event);
@@ -79,7 +81,11 @@ const EventDetails: FunctionComponent = () => {
                 : `${event.reservations?.length || 0} / ${event.capacity}`}
             </Text>
           </View>
-          <Pressable onPress={showModal} style={styles.button}>
+          <Pressable
+            disabled={full}
+            onPress={showModal}
+            style={[styles.button, full && styles.disabled]}
+          >
             <Text style={styles.buttonText}>Book this event</Text>
           </Pressable>
         </View>
@@ -138,6 +144,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     borderRadius: 8,
     alignItems: "center",
+  },
+  disabled: {
+    backgroundColor: Colors.grey,
   },
   buttonText: {
     color: Colors.white,

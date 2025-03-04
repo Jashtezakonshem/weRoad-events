@@ -22,6 +22,11 @@ const Modal: FunctionComponent = () => {
         telephone,
       };
       await postReservation(payload);
+      router.back();
+      Toast.show({
+        type: "success",
+        text1: "Reservation made successfully",
+      });
     } catch (error) {
       if (error instanceof AxiosError) {
         const errorMessage = error.response?.data.message;

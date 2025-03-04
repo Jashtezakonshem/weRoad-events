@@ -14,3 +14,5 @@ export type Reservation = {
   email: string;
   telephone: string;
 };
+
+export type Availability = "available" | "unavailable" | "all";
